@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="./three.js"></script>
+		<script src="./OrbitControls.js"></script>
+		<script>
+       
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x999999);
+        const light = new THREE.AmbientLight( 0x404040, 5.0 ); // soft white light
+        scene.add( light );
+        const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    /*     document.addEventListener( 'mousewheel', (event) => {
+          camera.position.z +=event.deltaY/1;
+        });
+
+        */
+
+        const renderer = new THREE.WebGLRenderer();
+        document.body.appendChild( renderer.domElement );
+
+        function resizeWindow() {
+          renderer.setSize( window.innerWidth, window.innerHeight );
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+        }
+        window.addEventListener( 'resize', resizeWindow);
+        resizeWindow();
+
+        const controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+
+        const geometry = new THREE.BoxGeometry(600, 280, 500, 6, 3, 5); 
+        // width : Float, height : Float, depth : Float, 
+        // widthSegments : Integer, heightSegments : Integer, depthSegments : Integer
+        const material = new THREE.MeshFaceMaterial([
+          new THREE.MeshBasicMaterial( {   color: 0xffffff, wireframe: true, side: THREE.DoubleSide  } ),
+          new THREE.MeshPhongMaterial( {   color: 0xffffa0, side: THREE.DoubleSide  } ),
+          new THREE.MeshLambertMaterial( {   color: 0xffff00, side: THREE.DoubleSide  } ),
+        ]);
+        const cube = new THREE.Mesh( geometry, material );
+        cube.position.set( 0, 0, 0 );
+
+
+        const geometry1 = new THREE.CircleGeometry( 30, 32 );
+        const material1 = new THREE.MeshPhongMaterial( { 
+          // map: new THREE.TextureLoader( ).load('info.svg'),
+          color: 0xf4f6f7, 
+          side: THREE.DoubleSide 
+        } );
+        const circle = new THREE.Mesh( geometry1, material1 );
+        circle.position.set( 50, 280/2, 0 );
+        circle.rotateX(THREE.Math.degToRad(90));
+
+        const circle2 = new THREE.Mesh( geometry1, material1 );
+        circle2.position.set( 600/2, 0, 0 );
+        circle2.rotateY(THREE.Math.degToRad(-90));
+
+        const circle3 = new THREE.Mesh( geometry1, material1 );
+        circle3.position.set( 0, 0, 0 );
+
+
+        const group = new THREE.Group();
+        group.add( cube );
+        group.add( circle );
+        group.add( circle2 );
+
+        scene.add( group );
+        scene.add(circle3);
+
+        camera.position.z = 250;
+        function animate() {
+          requestAnimationFrame( animate );
+           circle3.rotation.x += 0.01;
+          group.rotation.y += 0.001;
+          renderer.render( scene, camera );
+        }
+        animate();
+
+		</script>
+	</body>
+</html>
