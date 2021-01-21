@@ -3,15 +3,15 @@ services:
   postgress:
     image: 'postgres:latest'
     environment:
-      - POSTGRES_USER: 'myuser'
-      - POSTGRES_PASSWORD: '1'
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: 1
   redis:
     image: 'redis:latest'
-  nginx:
+  web:
     restart: always
     build:
       dockerfile: Dockerfile.dev
-      context: ./nginx
+      context: ./web
     ports: 
       - '3050:80'
   api: 
@@ -24,10 +24,10 @@ services:
     environment: 
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - PGUSER='myuser'
+      - PGUSER=myuser
       - PGHOST=postgress
-      - PGDATABASE='myuser'
-      - PGPASSWORD='1'
+      - PGDATABASE=myuser
+      - PGPASSWORD=1
       - PGPORT=5432
   client:
     build:
